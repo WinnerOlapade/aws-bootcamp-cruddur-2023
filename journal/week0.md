@@ -27,3 +27,7 @@ I created a $10 budget because i was comfortable spending up to that for the dur
 - I created the budget using the console
 
 ![Budget proof](https://github.com/WinnerOlapade/aws-bootcamp-cruddur-2023/blob/main/journal/assets/Budgets.png)
+
+### Recreate Conceptual Diagram in Lucid Chart
+
+### Recreate Logical Architecture design in Lucid chart
