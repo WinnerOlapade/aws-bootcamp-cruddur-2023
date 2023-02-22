@@ -3,14 +3,15 @@
 ## Required Homework
 
 ### Install and Configure AWS-CLI in Gitpod Workspace
-Installed AWS CLI in the workspace directory via the command:
+I installed AWS CLI installation process by following the information provided for Linux in the [Documentation page](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) on the official website.
+- Installed AWS CLI in the workspace directory via the command:
 ```
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
 ```
 
-Configured CLI to access my AWS account by passing my credentials as Environmental Variable:
+- Configured CLI to access my AWS account by passing my credentials as Environmental Variable:
 ```
 export AWS_ACCESS_KEY_ID="access-key"
 export AWS_SECRET_ACCESS_KEY="secret-key"
