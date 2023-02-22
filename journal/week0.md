@@ -17,5 +17,13 @@ export AWS_ACCESS_KEY_ID="access-key"
 export AWS_SECRET_ACCESS_KEY="secret-key"
 export AWS_DEFAULT_REGION="us-east-1"
 ```
-### proof of Configured CLI
+- proof of Configured CLI
+
 ![Configured AWS_CLI](https://github.com/WinnerOlapade/aws-bootcamp-cruddur-2023/blob/main/journal/assets/configured%20AWS_CLI%20with%20credentials.png)
+
+
+### Create Budgets
+I created a $10 budget because i was comfortable spending up to that for the duration of the Bootcamp
+- I created the budget using the console
+
+![Budget proof](https://github.com/WinnerOlapade/aws-bootcamp-cruddur-2023/blob/main/journal/assets/Budgets.png)
