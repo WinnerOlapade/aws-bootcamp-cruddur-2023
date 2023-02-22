@@ -29,5 +29,11 @@ I created a $10 budget because i was comfortable spending up to that for the dur
 ![Budget proof](https://github.com/WinnerOlapade/aws-bootcamp-cruddur-2023/blob/main/journal/assets/Budgets.png)
 
 ### Recreate Conceptual Diagram in Lucid Chart
+- I recreated the Conceptual diagram using Lucid chart and saved as pdf
+
+![Concepual diagram](https://github.com/WinnerOlapade/aws-bootcamp-cruddur-2023/blob/main/journal/assets/Cruddur%20-%20Conceptual%20Diagram.pdf)
 
 ### Recreate Logical Architecture design in Lucid chart
+-I recreated the Logical Architectural design using Lucid chart and saved as pdf
+
+![Logical diagram](https://github.com/WinnerOlapade/aws-bootcamp-cruddur-2023/blob/main/journal/assets/Cruddur%20Logical%20Diagram%20(1).pdf)
