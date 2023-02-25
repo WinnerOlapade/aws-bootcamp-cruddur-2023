@@ -311,3 +311,61 @@ article {
     justify-content: center;
   }
 ```
+
+
+
+## Add Postgres and DynamoDB Local
+
+### Adding Postgres to docker-compose
+I added postgres database to the docker-compose file in the root folder of my repository with the code:
+
+```yml
+services:
+  db:
+    image: postgres:13-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - '5432:5432'
+    volumes: 
+      - db:/var/lib/postgresql/data
+volumes:
+  db:
+    driver: local
+```
+
+I also added Postgres client into my Gitpod by adding the following to the gitpod.yml file also present in root directory:
+
+```yml
+  - name: postgres
+    init: |
+      curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
+      echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
+      sudo apt update
+      sudo apt install -y postgresql-client-13 libpq-dev
+```
+
+### Adding DynamoDB Local to docker-compose
+I added DynamoDB local to the existing docker-compose.yml file:
+
+```yml
+services:
+  dynamodb-local:
+    # https://stackoverflow.com/questions/67533058/persist-local-dynamodb-data-in-volumes-lack-permission-unable-to-open-databa
+    # We needed to add user:root to get this working.
+    user: root
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    image: "amazon/dynamodb-local:latest"
+    container_name: dynamodb-local
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./docker/dynamodb:/home/dynamodblocal/data"
+    working_dir: /home/dynamodblocal
+```
+
+### DynamoDB Local tryout
+I also tried to run the DynamoDB Local using the following steps from https://github.com/100DaysOfCloud/challenge-dynamodb-local
+
