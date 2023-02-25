@@ -80,7 +80,7 @@ docker run -p 3000:3000 -d frontend-react-js
 ## Multiple Containers
 
 ### Create docker-compose file
-I created a docker-compose.yml file at the root directory of my repository (to connect both the frontend and the backend of the app together) with the content:
+I created a [docker-compose.yml](docker-compose.yml) file at the root directory of my repository (to connect both the frontend and the backend of the app together) with the content:
 
 ```yml
 version: "3.8"
@@ -122,10 +122,12 @@ each time i run a container I unlock the ports mapped to the container and test 
 
 ** Insert Picture here **
 
+
+
 ## Add Notifications to Backend (Flask)
 
 ### Add notifications to Openapi file
-I edited openapi-3.0.yml present in the backend-flask folder of my repository and added block of code for notifications section of the backend.
+I edited [openapi-3.0.yml](backend-flask/openapi-3.0.yml) present in the backend-flask folder of my repository and added block of code for notifications section of the backend.
  
  ```yml
    /api/activities/notifications:
@@ -146,7 +148,7 @@ I edited openapi-3.0.yml present in the backend-flask folder of my repository an
  ```
  
 ### Added Notifications to app.py
-I added notifications to the app.py also present in the backend-flask folder. 
+I added notifications to the [app.py](backend-flask/app.py) also present in the backend-flask folder. 
 Added the following code to the corresponding block:
  
 ```python
@@ -161,7 +163,7 @@ def data_notifications():
 ```
 
 ### Added notifications_activities to Backend services
-I created a new file notifications_activities.py and added the code:
+I created a new file [notifications_activities.py](backend-flask/services/notifications_activities.py) and added the code:
 
 ```python
 from datetime import datetime, timedelta, timezone
@@ -197,7 +199,7 @@ class NotificationsActivities:
 ## Add notifications to Frontend (React)
 
 ### Add notifications to app.js
-I added the following code to the correcsponding blocks of the app.js file present in the frontend-react-js folder in my repository:
+I added the following code to the correcsponding blocks of the [app.js](frontend-react-js/src/App.js) file present in the frontend-react-js folder in my repository:
 
 ```js
 import NotificationsFeedPage from './pages/NotificationsFeedPage';
@@ -213,7 +215,7 @@ import NotificationsFeedPage from './pages/NotificationsFeedPage';
 ### Add notification pages
 I created 2 files (NotificationsFeedPage.js, NotificationsFeedPage.css) in  "pages" folder of "src" folder of the frontend-react-js folder (frontend-react-js -> src -> pages).
 
-I added the following code to "NotificationsFeedPage.js":
+I added the following code to "[NotificationsFeedPage.js](frontend-react-js/src/pages/NotificationsFeedPage.js)":
 
 ```js
 import './NotificationsFeedPage.css';
@@ -302,7 +304,7 @@ export default function NotificationsFeedPage() {
 }
 ```
 
-I added the following code to "NotificationsFeedPage.css":
+I added the following code to "[NotificationsFeedPage.css](frontend-react-js/src/pages/NotificationsFeedPage.css)":
 
 ```css
 article {
@@ -368,4 +370,60 @@ services:
 
 ### DynamoDB Local tryout
 I also tried to run the DynamoDB Local using the following steps from https://github.com/100DaysOfCloud/challenge-dynamodb-local
+
+
+
+## Homework Challenge
+
+### Run the dockerfile CMD as an external script
+- I added an external script [run_cmd.sh](backend-flask/run_cmd.sh) with the command:
+
+```sh
+#!/bin/bash
+python3 -m flask run --host=0.0.0.0 --port=4567
+```
+
+- I added the path of the script as the Dockerfile CMD
+ 
+```dockerfile
+CMD [ "./run_cmd.sh"]
+```
+
+### Push and tag a image to DockerHub
+- I already have a dockerHub account so I logged into Gitpod cli using:
+
+  ```
+  docker login
+  ```
+  
+- I created aand tagged a container image using the backend-flask dockerfile:
+
+  ```
+  docker tag backend-flask onyankupon/aws-cruddur-bootcamp:1.0
+  ```
+  
+- I pushed the taggged container to DockerHub using the command:
+  
+  ```
+  docker push onyankupon/aws-cruddur-bootcamp:1.0
+  ```
+  
+To pull image from repository try:
+
+```
+docker pull onyankupon/aws-cruddur-bootcamp:1.0
+```
+ 
+
+###  Install Docker on your localmachine
+I already have docker installed on my Local machine
+
+### Launch an EC2 instance that has Docker installed & pull a container
+- I launched an EC2 instance, connected to the EC2 instance, and Installed Docker using the [Official Documentation](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/create-container-image.html)
+
+- then pulled the container image pushed to my Docker repository using the command:
+
+  ```
+  docker pull onyankupon/aws-cruddur-bootcamp:1.0
+```
 
