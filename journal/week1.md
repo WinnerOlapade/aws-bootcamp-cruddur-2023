@@ -5,7 +5,7 @@
 ### Add Dockerfile to backend folder
 I created a dockerfile in the [backend-flask](backend-flask/Dockerfile) folder which contains:
 
-```
+```dockerfile
 FROM python:3.10-slim-buster
 WORKDIR /backend-flask
 COPY requirements.txt requirements.txt
@@ -27,13 +27,13 @@ python3 -m flask run --host=0.0.0.0 --port=4567
 ### Build Backend Container
 I built the backend container image (with container name "backend-flask") with the command:
 
-```
+```sh
 docker build -t  backend-flask ./backend-flask
 ```
 ### Run Backend Container
 I then run the container (using the container image built) and passing in the environmental variables (Backend_url and Frontend_url) in the same command which also maps port 4567 to 4567:
 
-```
+```sh
 docker run --rm -p 4567:4567 -it -e FRONTEND_URL='*' -e BACKEND_URL='*' backend-flask
 ```
 
@@ -43,7 +43,7 @@ docker run --rm -p 4567:4567 -it -e FRONTEND_URL='*' -e BACKEND_URL='*' backend-
 ### Run NPM install
 I executed the ` npm i ` command while in the frontend-react folder before building the container.
 
-```
+```sh
 cd frontend-react-js
 npm i
 ```
@@ -51,7 +51,7 @@ npm i
 ### Create Dockerfile to Frontend folder
 I created a Dockerfile in [frontend-react-js](frontend-react-js/Dockerfile) folder with content:
 
-```
+```dockerfile
 FROM node:16.18
 ENV PORT=3000
 COPY . /frontend-react-js
@@ -64,14 +64,14 @@ CMD ["npm", "start"]
 ### Build Frontend Container
 I built the frontend container (with container name "frontend-react-js") using the command:
 
-```
+```sh
 docker build -t frontend-react-js ./frontend-react-js
 ```
 
 ### Run Frontend Container
 I run the frontend container buit with the command:
 
-```
+```sh
 docker run -p 3000:3000 -d frontend-react-js
 ```
 
@@ -82,7 +82,7 @@ docker run -p 3000:3000 -d frontend-react-js
 ### Create docker-compose file
 I created a docker-compose.yml file at the root directory of my repository (to connect both the frontend and the backend of the app together) with the content:
 
-```
+```yml
 version: "3.8"
 services:
   backend-flask:
@@ -122,12 +122,12 @@ each time i run a container I unlock the ports mapped to the container and test 
 
 ** Insert Picture here **
 
-## Add Notifications to Backend
+## Add Notifications to Backend (Flask)
 
 ### Add notifications to Openapi file
 I edited openapi-3.0.yml present in the backend-flask folder of my repository and added block of code for notifications section of the backend.
  
- ```
+ ```yml
    /api/activities/notifications:
     get:
       description: 'Return a feed of activities for all those I follow'
@@ -163,7 +163,7 @@ def data_notifications():
 ### Added notifications_activities to Backend services
 I created a new file notifications_activities.py and added the code:
 
-```
+```python
 from datetime import datetime, timedelta, timezone
 class NotificationsActivities:
   def run():
@@ -190,4 +190,124 @@ class NotificationsActivities:
     },
     ]
     return results
+```
+
+
+
+## Add notifications to Frontend (React)
+
+### Add notifications to app.js
+I added the following code to the correcsponding blocks of the app.js file present in the frontend-react-js folder in my repository:
+
+```js
+import NotificationsFeedPage from './pages/NotificationsFeedPage';
+```
+
+```js
+{
+    path: "/notifications",
+    element: <NotificationsFeedPage />
+  },
+```
+
+### Add notification pages
+I created 2 files (NotificationsFeedPage.js, NotificationsFeedPage.css) in  "pages" folder of "src" folder of the frontend-react-js folder (frontend-react-js -> src -> pages).
+
+I added the following code to "NotificationsFeedPage.js":
+
+```js
+import './NotificationsFeedPage.css';
+import React from "react";
+
+import DesktopNavigation  from '../components/DesktopNavigation';
+import DesktopSidebar     from '../components/DesktopSidebar';
+import ActivityFeed from '../components/ActivityFeed';
+import ActivityForm from '../components/ActivityForm';
+import ReplyForm from '../components/ReplyForm';
+
+// [TODO] Authenication
+import Cookies from 'js-cookie'
+
+export default function NotificationsFeedPage() {
+  const [activities, setActivities] = React.useState([]);
+  const [popped, setPopped] = React.useState(false);
+  const [poppedReply, setPoppedReply] = React.useState(false);
+  const [replyActivity, setReplyActivity] = React.useState({});
+  const [user, setUser] = React.useState(null);
+  const dataFetchedRef = React.useRef(false);
+
+  const loadData = async () => {
+    try {
+      const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/activities/notifications`
+      const res = await fetch(backend_url, {
+        method: "GET"
+      });
+      let resJson = await res.json();
+      if (res.status === 200) {
+        setActivities(resJson)
+      } else {
+        console.log(res)
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const checkAuth = async () => {
+    console.log('checkAuth')
+    // [TODO] Authenication
+    if (Cookies.get('user.logged_in')) {
+      setUser({
+        display_name: Cookies.get('user.name'),
+        handle: Cookies.get('user.username')
+      })
+    }
+  };
+
+  React.useEffect(()=>{
+    //prevents double call
+    if (dataFetchedRef.current) return;
+    dataFetchedRef.current = true;
+
+    loadData();
+    checkAuth();
+  }, [])
+
+  return (
+    <article>
+      <DesktopNavigation user={user} active={'notifications'} setPopped={setPopped} />
+      <div className='content'>
+        <ActivityForm  
+          popped={popped}
+          setPopped={setPopped} 
+          setActivities={setActivities} 
+        />
+        <ReplyForm 
+          activity={replyActivity} 
+          popped={poppedReply} 
+          setPopped={setPoppedReply} 
+          setActivities={setActivities} 
+          activities={activities} 
+        />
+        <ActivityFeed 
+          title="notifications" 
+          setReplyActivity={setReplyActivity} 
+          setPopped={setPoppedReply} 
+          activities={activities} 
+        />
+      </div>
+      <DesktopSidebar user={user} />
+    </article>
+  );
+}
+```
+
+I added the following code to "NotificationsFeedPage.css":
+
+```css
+article {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
 ```
