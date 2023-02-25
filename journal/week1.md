@@ -18,11 +18,24 @@ EXPOSE ${PORT}
 CMD [ "./run_cmd.sh"]
 ```
 
-I added run_cmd script which contains command which Dockerfile CMD will execute.
+I added run_cmd script which contains the command which Dockerfile CMD will execute (this becomes useful when there are several lines of command to run).
 Content of [run_cmd.sh](backend-flask/run_cmd.sh):
 
 ```sh
 #!/bin/bash
 python3 -m flask run --host=0.0.0.0 --port=4567
+```
+
+### Build Backend Container
+I built the backend container image (with container name "backend-flask") with the command:
+
+```
+docker build -t  backend-flask ./backend-flask
+```
+### Run Backend Container
+I then run the container (using the container image built) and passing in the environmental variables (Backend_url and Frontend_url) in the same command which also maps port 4567 to 4567:
+
+```
+docker run --rm -p 4567:4567 -it -e FRONTEND_URL='*' -e BACKEND_URL='*' backend-flask
 ```
 
