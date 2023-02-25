@@ -74,3 +74,39 @@ I run the frontend container buit with the command:
 ```
 docker run -p 3000:3000 -d frontend-react-js
 ```
+
+
+
+## Multiple Containers
+
+### Create docker-compose file
+I created a docker-compose.yml file at the root directory of my repository (to connect both the frontend and the backend of the app together) with the content:
+
+```
+version: "3.8"
+services:
+  backend-flask:
+    environment:
+      FRONTEND_URL: "https://3000-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+      BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+    build: ./backend-flask
+    ports:
+      - "4567:4567"
+    volumes:
+      - ./backend-flask:/backend-flask
+  
+  frontend-react-js:
+    environment:
+      REACT_APP_BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+    build: ./frontend-react-js
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend-react-js:/frontend-react-js
+
+networks: 
+  internal-network:
+    driver: bridge
+    name: cruddur   
+```
+
