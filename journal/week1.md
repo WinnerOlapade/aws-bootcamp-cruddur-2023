@@ -110,3 +110,84 @@ networks:
     name: cruddur   
 ```
 
+### Run Docker-compose
+I run the docker-compose.yml with the command:
+
+```
+docker-compose up
+```
+
+### Note
+each time i run a container I unlock the ports mapped to the container and test by clicking on the links provided in the gitpod -> ports section of the terminal to check if properly configured.
+
+** Insert Picture here **
+
+## Add Notifications to Backend
+
+### Add notifications to Openapi file
+I edited openapi-3.0.yml present in the backend-flask folder of my repository and added block of code for notifications section of the backend.
+ 
+ ```
+   /api/activities/notifications:
+    get:
+      description: 'Return a feed of activities for all those I follow'
+      tags:
+        - activities
+      parameters: []
+      responses:
+        '200':
+          description: 'Returns an array of activities'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Activity'
+ ```
+ 
+### Added Notifications to app.py
+I added notifications to the app.py also present in the backend-flask folder. 
+Added the following code to the corresponding block:
+ 
+```python
+ from services.notifications_activities import *
+```
+ 
+```python
+ @app.route("/api/activities/notifications", methods=['GET'])
+def data_notifications():
+  data = NotificationsActivities.run()
+  return data, 200
+```
+
+### Added notifications_activities to Backend services
+I created a new file notifications_activities.py and added the code:
+
+```
+from datetime import datetime, timedelta, timezone
+class NotificationsActivities:
+  def run():
+    now = datetime.now(timezone.utc).astimezone()
+    results = [{
+      'uuid': '68f126b0-1ceb-4a33-88be-d90fa7109eee',
+      'handle':  'Winner Olapade',
+      'message': 'Tis is going great! ',
+      'created_at': (now - timedelta(days=2)).isoformat(),
+      'expires_at': (now + timedelta(days=5)).isoformat(),
+      'likes_count': 5,
+      'replies_count': 1,
+      'reposts_count': 0,
+      'replies': [{
+        'uuid': '26e12864-1c26-5c3a-9658-97a10f8fea67',
+        'reply_to_activity_uuid': '68f126b0-1ceb-4a33-88be-d90fa7109eee',
+        'handle':  'Worf',
+        'message': 'This post has no honor!',
+        'likes_count': 0,
+        'replies_count': 0,
+        'reposts_count': 0,
+        'created_at': (now - timedelta(days=2)).isoformat()
+      }],
+    },
+    ]
+    return results
+```
