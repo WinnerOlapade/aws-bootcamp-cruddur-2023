@@ -13,7 +13,7 @@ RUN pip3 install -r requirements.txtdirectory in the container
 COPY . .
 ENV FLASK_ENV=development
 EXPOSE ${PORT}
-CMD [ "./run_cmd.sh"]
+CMD ./run_cmd.sh
 ```
 
 I added "run_cmd" script which contains the command which Dockerfile CMD will execute (this becomes useful when there are several lines of command to run).
