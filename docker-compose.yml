@@ -32,33 +32,33 @@ services:
       timeout: 10s
       retries: 3
 
-  dynamodb-local:
-    # We needed to add user:root to get this working.
-    user: root
-    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
-    image: "amazon/dynamodb-local:latest"
-    container_name: dynamodb-local
-    ports:
-      - "8000:8000"
-    volumes:
-      - "./docker/dynamodb:/home/dynamodblocal/data"
-    working_dir: /home/dynamodblocal
-    healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 8000"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+  # dynamodb-local:
+  #   # We needed to add user:root to get this working.
+  #   user: root
+  #   command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+  #   image: "amazon/dynamodb-local:latest"
+  #   container_name: dynamodb-local
+  #   ports:
+  #     - "8000:8000"
+  #   volumes:
+  #     - "./docker/dynamodb:/home/dynamodblocal/data"
+  #   working_dir: /home/dynamodblocal
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "nc -z localhost 8000"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
 
-  db:
-    image: postgres:13-alpine
-    restart: always
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-    ports:
-      - '5432:5432'
-    volumes: 
-      - db:/var/lib/postgresql/data
+  # db:
+  #   image: postgres:13-alpine
+  #   restart: always
+  #   environment:
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=password
+  #   ports:
+  #     - '5432:5432'
+  #   volumes: 
+  #     - db:/var/lib/postgresql/data
     # healthcheck:
     #   test: ["executable", "arg"]
     #   interval: 1m30s
@@ -72,6 +72,6 @@ networks:
     driver: bridge
     name: cruddur
 
-volumes:
-  db:
-    driver: local
+# volumes:
+#   db:
+#     driver: local
