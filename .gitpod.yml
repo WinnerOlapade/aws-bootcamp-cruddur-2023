@@ -3,11 +3,20 @@ tasks:
     env:
       AWS_CLI_AUTO_PROMPT: on-partial
     init: |
-      cd /workspaces
+      cd /workspace
       curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
       unzip awscliv2.zip
       sudo ./aws/install
       cd $THEIA_WORKSPACES_ROOT
+
+  - name: Initialize Frontend & Backend
+    init: |
+      cd $THEIA_WORKSPACES_ROOT/frontend-react-js
+      npm i
+      cd $THEIA_WORKSPACES_ROOT/backend-flask
+      pip3 install -r requirements.txt
+      cd $THEIA_WORKSPACES_ROOT
+
 # Install postgres client into gitpod
   - name: postgres
     init: |
