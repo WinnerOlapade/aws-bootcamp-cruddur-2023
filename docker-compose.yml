@@ -45,6 +45,7 @@ services:
       - "xray -o -b xray-daemon:2000"
     ports:
       - 2000:2000/udp
+
   # dynamodb-local:
   #   # We needed to add user:root to get this working.
   #   user: root
@@ -80,6 +81,7 @@ services:
     #   start_period: 30s
 # the name flag is a hack to change the default prepend folder
 # name when outputting the image names
+
 networks: 
   internal-network:
     driver: bridge
