@@ -69,7 +69,7 @@ cognito_jwt_token = CognitoJwtToken(
   region=os.getenv("AWS_DEFAULT_REGION")
 )
 
-# Rollbar --------
+# Rollbar ----------
 rollbar_access_token = os.getenv('ROLLBAR_ACCESS_TOKEN')
 @app.before_first_request
 def init_rollbar():
@@ -87,6 +87,7 @@ def init_rollbar():
     # send exceptions from `app` to rollbar, using flask's signal system.
     got_request_exception.connect(rollbar.contrib.flask.report_exception, app)
 
+    
 # X-RAY ----------
 # XRayMiddleware(app, xray_recorder)
 
