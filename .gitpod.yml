@@ -13,7 +13,6 @@ tasks:
       npm i
       cd /workspace/aws-bootcamp-cruddur-2023/backend-flask
       pip3 install -r requirements.txt
-      pip install --upgrade pip
       cd $THEIA_WORKSPACE_ROOT
 
 # Install postgres client into gitpod
